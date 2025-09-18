@@ -4,6 +4,66 @@ import BASE_URL from "../../config/baseUrl";
 import img from "../../assets/images/imagelogo.jpg";
 
 const Login = () => {
+  const styles = {
+    page: {
+      height: "100vh",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      background: "linear-gradient(135deg, #6e00ff, #8e2de2, #4a00e0)",
+      fontFamily: "Segoe UI, sans-serif",
+    },
+    card: {
+      width: "950px",
+      height: "580px",
+      display: "flex",
+      borderRadius: "16px",
+      overflow: "hidden",
+      boxShadow: "0 20px 50px rgba(0,0,0,0.3)",
+      backgroundColor: "#fff",
+    },
+    leftPanel: {
+      flex: 1,
+      background: "linear-gradient(135deg, #6e00ff, #8e2de2, #4a00e0)",
+      color: "#fff",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      position: "relative",
+      padding: "40px",
+      textAlign: "center",
+    },
+    image: {
+      width: "80%",
+      maxWidth: "300px",
+      marginBottom: "20px",
+      zIndex: 1,
+    },
+    welcomeText: {
+      fontSize: "30px",
+      fontWeight: "600",
+      marginBottom: "10px",
+      zIndex: 1,
+    },
+    subText: {
+      fontSize: "16px",
+      opacity: 0.9,
+      zIndex: 1,
+    },
+    rightPanel: {
+      flex: 1,
+      backgroundColor: "#fff",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: "40px",
+    },
+    formBox: {
+      width: "100%",
+      maxWidth: "320px",
+    },
+  };
   const [data, setData] = useState({ email: "", password: "" });
 
   const handleChange = (e) => {
