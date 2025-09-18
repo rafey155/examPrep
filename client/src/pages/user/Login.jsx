@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import BASE_URL from "../../config/baseUrl";
 import img from "../../assets/images/imagelogo.jpg";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const styles = {
     page: {
       height: "100vh",
@@ -83,7 +85,7 @@ const Login = () => {
   };
 
   const handleRegisterRedirect = () => {
-    window.location.href = "/user/registration";
+    navigate("/registration");
   };
 
   return (
