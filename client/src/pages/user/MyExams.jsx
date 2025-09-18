@@ -1,19 +1,20 @@
-import axios from 'axios';
-import React, { useEffect } from 'react'
-import { Link } from 'react-router';
+import axios from "axios";
+import BASE_URL from "../../config/baseUrl";
+import React, { useEffect } from "react";
+import { Link } from "react-router";
 
 const MyExams = () => {
-    const [exam , setExam] = React.useState([]);
-    const fetchExams = async () =>{
-        const res =await axios.get('http://localhost:5000/api/exams/exams');
-        setExam(res.data);
-    }            
-    useEffect(() =>{
-        fetchExams();
-    },[]);
+  const [exam, setExam] = React.useState([]);
+  const fetchExams = async () => {
+    const res = await axios.get(`${BASE_URL}/api/exams/exams`);
+    setExam(res.data);
+  };
+  useEffect(() => {
+    fetchExams();
+  }, []);
 
   return (
-     <div
+    <div
       className="card mx-auto mt-2"
       style={{ width: "95%", maxWidth: "1300px", borderRadius: "12px" }}
     >
@@ -26,38 +27,39 @@ const MyExams = () => {
         <div className="row mt-3">
           <div className="col-sm-12">
             <table className="table table-bordered table-hover text-center">
-              <thead
-              
-                className="table-primary"
-              >
+              <thead className="table-primary">
                 <tr>
                   <th>S.No.</th>
-                  <th >Exam Name</th>
+                  <th>Exam Name</th>
                   <th>Date Of Exam </th>
                   <th>Time</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                     {exam.map((item,i)=>(
-                        <tr key={item._id}>
-                            <td>{i+1}</td>
-                            <td>{item.title}</td>
-                            <td>{new Date(item.date).toLocaleDateString()}</td>
-                            <td>{item.time}</td>
-                            <td>
-                                <Link to={`/user/getexam/${item._id}`} className="btn btn-primary">
-                                 Start Exam </Link>
-                            </td>
-                        </tr>
-                     ))}
-                     </tbody>
+                {exam.map((item, i) => (
+                  <tr key={item._id}>
+                    <td>{i + 1}</td>
+                    <td>{item.title}</td>
+                    <td>{new Date(item.date).toLocaleDateString()}</td>
+                    <td>{item.time}</td>
+                    <td>
+                      <Link
+                        to={`/user/getexam/${item._id}`}
+                        className="btn btn-primary"
+                      >
+                        Start Exam{" "}
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
-        </div>                      
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default MyExams
+export default MyExams;

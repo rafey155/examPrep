@@ -1,23 +1,24 @@
 import axios from "axios";
+import BASE_URL from "../../config/baseUrl";
 import React, { useEffect, useState } from "react";
 
 const Registration = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    number: '',
-    address: '',
-    password: '',
-    college: '',
-    qualification: '',
-    session: '',
+    name: "",
+    email: "",
+    number: "",
+    address: "",
+    password: "",
+    college: "",
+    qualification: "",
+    session: "",
   });
 
   const [sessions, setSessions] = useState([]);
 
   const handlefetch = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/session");
+      const res = await axios.get(`${BASE_URL}/api/session`);
       setSessions(res.data.data);
     } catch (er) {
       console.log(er);
@@ -31,61 +32,65 @@ const Registration = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/examinee', formData);
-    if(res.data.message=="Registered Succussfully"){
-      alert(res.data.message)
-    }
-      
-   
+      const res = await axios.post(`${BASE_URL}/api/examinee`, formData);
+      if (res.data.message == "Registered Succussfully") {
+        alert(res.data.message);
+      }
+
       setFormData({
-        name: '',
-        email: '',
-        number: '',
-        address: '',
-        password: '',
-        college: '',
-        qualification: '',
-        session: '',
+        name: "",
+        email: "",
+        number: "",
+        address: "",
+        password: "",
+        college: "",
+        qualification: "",
+        session: "",
       });
     } catch (error) {
-      console.error('Submission Error:', error);
-      alert('Failed to register');
+      console.error("Submission Error:", error);
+      alert("Failed to register");
     }
   };
 
   return (
-    <div className="min-vh-100 d-flex" style={{ backgroundColor: '#1e3a5f' }}>
+    <div className="min-vh-100 d-flex" style={{ backgroundColor: "#1e3a5f" }}>
       {/* Left Panel */}
-<div
-  className="col-md-6 d-none d-md-flex align-items-center justify-content-center text-white"
-  style={{
-    background:  'linear-gradient(135deg, #6e00ff, #8e2de2, #4a00e0)', // purple/blue gradient
-    borderTopLeftRadius: '20px',
-    borderBottomLeftRadius: '20px',
-    padding: '3rem'
-  }}
->
-  <div className="text-center px-4">
-    <h1 className="fw-bold display-5">Welcome!</h1>
-    <p className="mt-3 fs-5">
-      Register now to get started with your journey.
-    </p>
-  </div>
-</div>
+      <div
+        className="col-md-6 d-none d-md-flex align-items-center justify-content-center text-white"
+        style={{
+          background: "linear-gradient(135deg, #6e00ff, #8e2de2, #4a00e0)", // purple/blue gradient
+          borderTopLeftRadius: "20px",
+          borderBottomLeftRadius: "20px",
+          padding: "3rem",
+        }}
+      >
+        <div className="text-center px-4">
+          <h1 className="fw-bold display-5">Welcome!</h1>
+          <p className="mt-3 fs-5">
+            Register now to get started with your journey.
+          </p>
+        </div>
+      </div>
 
       {/* Right Panel */}
-      <div className="col-md-6 d-flex align-items-center justify-content-center" style={{ backgroundColor: '#f8f9fa' }}>
-        <div className="container px-4 py-5" style={{ maxWidth: '500px' }}>
+      <div
+        className="col-md-6 d-flex align-items-center justify-content-center"
+        style={{ backgroundColor: "#f8f9fa" }}
+      >
+        <div className="container px-4 py-5" style={{ maxWidth: "500px" }}>
           <div className="text-center mb-4">
             <h3 className="fw-bold text-dark">Sign Up Here</h3>
-            <p className="text-muted">Please fill in this form to create an account</p>
+            <p className="text-muted">
+              Please fill in this form to create an account
+            </p>
           </div>
 
           <form onSubmit={handleSubmit}>
@@ -132,7 +137,9 @@ const Registration = () => {
               >
                 <option value="">Select Session</option>
                 {sessions.map((item) => (
-                  <option key={item._id} value={item._id}>{item.name}</option>
+                  <option key={item._id} value={item._id}>
+                    {item.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -187,7 +194,7 @@ const Registration = () => {
 
             <div className="text-center mt-4">
               <button
-                background= 'linear-gradient(to right, #4a00e0, #8e2de2)'
+                background="linear-gradient(to right, #4a00e0, #8e2de2)"
                 type="submit"
                 className="btn btn-dark w-100 py-2 rounded-pill"
               >

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import BASE_URL from "../../config/baseUrl";
 
 const QuestionBank = () => {
   const [formData, setFormdata] = useState({
@@ -14,7 +15,7 @@ const QuestionBank = () => {
 
   const [data, setData] = useState([]);
   const [subjects, setSubjects] = useState([]);
-  const [id, setId] = useState({ id: '' });
+  const [id, setId] = useState({ id: "" });
   const [editform, setEditForm] = useState(false);
 
   const handleChange = (e) => {
@@ -25,11 +26,14 @@ const QuestionBank = () => {
     e.preventDefault();
     try {
       if (editform) {
-        const res = await axios.put(`http://localhost:5000/api/question/${id.id}`, formData);
-        if (res) alert('Question updated successfully');
+        const res = await axios.put(
+          `${BASE_URL}/api/question/${id.id}`,
+          formData
+        );
+        if (res) alert("Question updated successfully");
       } else {
-        const res = await axios.post('http://localhost:5000/api/question', formData);
-        if (res) alert('Question added successfully');
+        const res = await axios.post(`${BASE_URL}/api/question`, formData);
+        if (res) alert("Question added successfully");
       }
 
       setFormdata({
@@ -42,7 +46,7 @@ const QuestionBank = () => {
         subject: "",
       });
       setEditForm(false);
-      setId({ id: '' });
+      setId({ id: "" });
       handlefetch();
     } catch (err) {
       console.log(err);
@@ -51,10 +55,10 @@ const QuestionBank = () => {
   };
 
   const handlefetch = async () => {
-    const res = await axios.get('http://localhost:5000/api/question');
+    const res = await axios.get(`${BASE_URL}/api/question`);
     setData(res.data.data);
 
-    const res1 = await axios.get('http://localhost:5000/api/subject');
+    const res1 = await axios.get(`${BASE_URL}/api/subject`);
     setSubjects(res1.data.data);
   };
 
@@ -64,7 +68,9 @@ const QuestionBank = () => {
 
   const handleDelete = async (id) => {
     try {
-      const res = await axios.delete(`http://localhost:5000/api/question/${id}`);
+      const res = await axios.delete(
+        `http://localhost:5000/api/question/${id}`
+      );
       if (res) {
         alert("Deleted Successfully");
         handlefetch();
@@ -91,7 +97,15 @@ const QuestionBank = () => {
   return (
     <div className="container my-4">
       {/* Heading */}
-      <h2 className="text-center mb-4" style={{ background: 'linear-gradient(to right, #8e2de2, #4a00e0)', WebkitBackgroundClip: 'text', color: 'transparent', fontWeight: 'bold' }}>
+      <h2
+        className="text-center mb-4"
+        style={{
+          background: "linear-gradient(to right, #8e2de2, #4a00e0)",
+          WebkitBackgroundClip: "text",
+          color: "transparent",
+          fontWeight: "bold",
+        }}
+      >
         {editform ? "Edit Question" : "Add New Question"}
       </h2>
 
@@ -184,13 +198,25 @@ const QuestionBank = () => {
             </select>
           </div>
         </div>
-        <button type="submit" className="btn text-white" style={{ background: '#4a00e0' }}>
+        <button
+          type="submit"
+          className="btn text-white"
+          style={{ background: "#4a00e0" }}
+        >
           {editform ? "Update Question" : "Add Question"}
         </button>
       </form>
 
       {/* Question List */}
-      <h2 className="text-center my-4" style={{ background: 'linear-gradient(to right, #8e2de2, #4a00e0)', WebkitBackgroundClip: 'text', color: 'transparent', fontWeight: 'bold' }}>
+      <h2
+        className="text-center my-4"
+        style={{
+          background: "linear-gradient(to right, #8e2de2, #4a00e0)",
+          WebkitBackgroundClip: "text",
+          color: "transparent",
+          fontWeight: "bold",
+        }}
+      >
         Question List
       </h2>
       <div className="table-responsive">
@@ -220,10 +246,16 @@ const QuestionBank = () => {
                 <td>{q.optionD}</td>
                 <td>{q.correctAnswer}</td>
                 <td>
-                  <button className="btn btn-warning btn-sm me-2" onClick={() => handleEdit(q)}>
+                  <button
+                    className="btn btn-warning btn-sm me-2"
+                    onClick={() => handleEdit(q)}
+                  >
                     Edit
                   </button>
-                  <button className="btn btn-danger btn-sm" onClick={() => handleDelete(q._id)}>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handleDelete(q._id)}
+                  >
                     Delete
                   </button>
                 </td>

@@ -1,12 +1,13 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import axios from "axios";
+import BASE_URL from "../../config/baseUrl";
+import React, { useEffect, useState } from "react";
 
 const Report = () => {
   const [data, setData] = useState([]);
 
   const handlefetch = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/exams/report');
+      const res = await axios.get(`${BASE_URL}/api/exams/report`);
       setData(res.data);
     } catch (er) {
       alert("Sorry Fetching reports");
@@ -19,7 +20,7 @@ const Report = () => {
 
   const handlePrint = (item) => {
     // Create a new window for printing
-    const printWindow = window.open('', '_blank', 'width=800,height=600');
+    const printWindow = window.open("", "_blank", "width=800,height=600");
     printWindow.document.write(`
       <html>
         <head>

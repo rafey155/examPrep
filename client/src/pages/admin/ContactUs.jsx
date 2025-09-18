@@ -1,40 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import BASE_URL from "../../config/baseUrl";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
-    question: '',
-    email: localStorage.getItem('userEmail') || ''
+    question: "",
+    email: localStorage.getItem("userEmail") || "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/message', formData);
+      const response = await axios.post(`${BASE_URL}/api/message`, formData);
       alert(response.data.message);
-      setFormData({ question: '', email: formData.email });
+      setFormData({ question: "", email: formData.email });
     } catch (error) {
-      console.error('Error sending message:', error);
-      alert('Failed to send message');
+      console.error("Error sending message:", error);
+      alert("Failed to send message");
     }
   };
 
   const [messages, setMessages] = useState([]);
   const fetchMessages = async () => {
     try {
-      const userId = localStorage.getItem('userId');
-      const response = await axios.get(`http://localhost:5000/api/message/${userId}`);
+      const userId = localStorage.getItem("userId");
+      const response = await axios.get(`${BASE_URL}/api/message/${userId}`);
       setMessages(response.data.message);
     } catch (error) {
-      console.error('Error fetching message:', error);
+      console.error("Error fetching message:", error);
     }
   };
 
@@ -46,13 +47,15 @@ const ContactUs = () => {
     <div className="container my-5">
       {/* Contact Form */}
       <div className="row justify-content-center">
-        <div className="col-md-8"> {/* Increased width from col-md-6 to col-md-8 */}
+        <div className="col-md-8">
+          {" "}
+          {/* Increased width from col-md-6 to col-md-8 */}
           <div
             className="card shadow"
             style={{
-              borderRadius: '16px',
-              padding: '24px',
-              minHeight: '350px'
+              borderRadius: "16px",
+              padding: "24px",
+              minHeight: "350px",
             }}
           >
             <div className="text-center mb-3">
@@ -61,7 +64,9 @@ const ContactUs = () => {
             <div className="card-body">
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  <label className="form-label"><strong>Your Message</strong></label>
+                  <label className="form-label">
+                    <strong>Your Message</strong>
+                  </label>
                   <textarea
                     className="form-control"
                     name="question"
@@ -75,7 +80,11 @@ const ContactUs = () => {
                 <button
                   type="submit"
                   className="btn w-100"
-                  style={{ backgroundColor: '#6a11cb', color: '#fff', borderRadius: '30px' }}
+                  style={{
+                    backgroundColor: "#6a11cb",
+                    color: "#fff",
+                    borderRadius: "30px",
+                  }}
                 >
                   Submit
                 </button>
@@ -88,12 +97,18 @@ const ContactUs = () => {
       {/* User Feedback Table */}
       <div className="row justify-content-center mt-5">
         <div className="col-md-10">
-          <h5 className="mb-3 fw-semibold text-center text-uppercase" style={{ color: '#6a11cb' }}>
+          <h5
+            className="mb-3 fw-semibold text-center text-uppercase"
+            style={{ color: "#6a11cb" }}
+          >
             User Feedbacks
           </h5>
           <div className="table-responsive">
             <table className="table table-bordered shadow text-center">
-              <thead className="text-white" style={{ backgroundColor: '#6a11cb' }}>
+              <thead
+                className="text-white"
+                style={{ backgroundColor: "#6a11cb" }}
+              >
                 <tr>
                   <th>S.No.</th>
                   <th>Feedback</th>
@@ -107,8 +122,12 @@ const ContactUs = () => {
                       <td>{index + 1}</td>
                       <td>{msg.question}</td>
                       <td className="d-flex justify-content-center gap-2">
-                        <button className="btn btn-sm btn-warning">Approve</button>
-                        <button className="btn btn-sm btn-success">Delete</button>
+                        <button className="btn btn-sm btn-warning">
+                          Approve
+                        </button>
+                        <button className="btn btn-sm btn-success">
+                          Delete
+                        </button>
                       </td>
                     </tr>
                   ))

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
-import axios from 'axios';
-
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router";
+import axios from "axios";
+import BASE_URL from "../../config/baseUrl";
 
 const GetExam = () => {
   const { id: examId } = useParams();
@@ -9,22 +9,22 @@ const GetExam = () => {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [result, setResult] = useState(null);
-  const email = localStorage.getItem('userEmail')
+  const email = localStorage.getItem("userEmail");
   useEffect(() => {
     const fetchExam = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/exams/exam/${examId}`);
+        const res = await axios.get(`${BASE_URL}/api/exams/exam/${examId}`);
         const { exam: examData, questions: questionData } = res.data;
         setExam(examData);
         setQuestions(questionData);
 
         setTimeLeft(parseInt(examData.duration) * 60);
       } catch (err) {
-        console.error('Error fetching exam:', err);
-        setError(err.response?.data?.error || 'Failed to load exam');
+        console.error("Error fetching exam:", err);
+        setError(err.response?.data?.error || "Failed to load exam");
       }
     };
     fetchExam();
@@ -50,7 +50,7 @@ const GetExam = () => {
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
   const handleAnswerChange = (questionId, answer) => {
@@ -61,18 +61,20 @@ const GetExam = () => {
     if (submitted) return; // Prevent multiple submissions
 
     try {
-      const res = await axios.post('http://localhost:5000/api/exams/submit-exam', {
+      const res = await axios.post(`${BASE_URL}/api/exams/submit-exam`, {
         examId,
         answers,
         email,
       });
       setResult(res.data);
       setSubmitted(true);
-      alert("Your Exam was submitted successfully. Result will be declared soon.");
-      window.location.href = '/user/profile';
+      alert(
+        "Your Exam was submitted successfully. Result will be declared soon."
+      );
+      window.location.href = "/user/profile";
     } catch (err) {
-      console.error('Error submitting exam:', err);
-      setError(err.response?.data?.error || 'Failed to submit exam');
+      console.error("Error submitting exam:", err);
+      setError(err.response?.data?.error || "Failed to submit exam");
     }
   };
 
@@ -88,35 +90,59 @@ const GetExam = () => {
     <div className="container mt-4">
       <h2>{exam.title}</h2>
       <div className="mb-3">
-        <p><strong>Duration:</strong> {exam.duration} minutes</p>
-        <p><strong>Total Marks:</strong> {exam.totalMarks}</p>
-        <p><strong>Passing Marks:</strong> {exam.passingMarks}</p>
-        <p><strong>Time Left:</strong> {formatTime(timeLeft)}</p>
+        <p>
+          <strong>Duration:</strong> {exam.duration} minutes
+        </p>
+        <p>
+          <strong>Total Marks:</strong> {exam.totalMarks}
+        </p>
+        <p>
+          <strong>Passing Marks:</strong> {exam.passingMarks}
+        </p>
+        <p>
+          <strong>Time Left:</strong> {formatTime(timeLeft)}
+        </p>
       </div>
 
       {submitted && result ? (
         <div className="alert alert-info">
           <h4>Exam Results</h4>
-          <p><strong>Score:</strong> {result.score} / {result.totalMarks}</p>
-          <p><strong>Status:</strong> {result.passed ? 'Passed' : 'Failed'}</p>
+          <p>
+            <strong>Score:</strong> {result.score} / {result.totalMarks}
+          </p>
+          <p>
+            <strong>Status:</strong> {result.passed ? "Passed" : "Failed"}
+          </p>
           <h5>Answer Details:</h5>
           <ul>
             {result.results.map((res, index) => (
               <li key={index}>
-                <strong>Question {index + 1}:</strong> {res.question}<br />
-                <strong>Your Answer:</strong> {res.selectedAnswer || 'Not answered'}<br />
-                <strong>Correct Answer:</strong> {res.correctAnswer}<br />
-                <strong>Result:</strong> {res.isCorrect ? 'Correct' : 'Incorrect'}
+                <strong>Question {index + 1}:</strong> {res.question}
+                <br />
+                <strong>Your Answer:</strong>{" "}
+                {res.selectedAnswer || "Not answered"}
+                <br />
+                <strong>Correct Answer:</strong> {res.correctAnswer}
+                <br />
+                <strong>Result:</strong>{" "}
+                {res.isCorrect ? "Correct" : "Incorrect"}
               </li>
             ))}
           </ul>
         </div>
       ) : (
-        <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
+        >
           {questions.map((q, index) => (
             <div key={q._id} className="card mb-3">
               <div className="card-body">
-                <h5>Question {index + 1}: {q.question}</h5>
+                <h5>
+                  Question {index + 1}: {q.question}
+                </h5>
                 <div className="form-check">
                   <input
                     type="radio"
@@ -128,7 +154,10 @@ const GetExam = () => {
                     id={`optionA-${q._id}`}
                     disabled={submitted}
                   />
-                  <label className="form-check-label" htmlFor={`optionA-${q._id}`}>
+                  <label
+                    className="form-check-label"
+                    htmlFor={`optionA-${q._id}`}
+                  >
                     {q.optionA}
                   </label>
                 </div>
@@ -143,7 +172,10 @@ const GetExam = () => {
                     id={`optionB-${q._id}`}
                     disabled={submitted}
                   />
-                  <label className="form-check-label" htmlFor={`optionB-${q._id}`}>
+                  <label
+                    className="form-check-label"
+                    htmlFor={`optionB-${q._id}`}
+                  >
                     {q.optionB}
                   </label>
                 </div>
@@ -158,7 +190,10 @@ const GetExam = () => {
                     id={`optionC-${q._id}`}
                     disabled={submitted}
                   />
-                  <label className="form-check-label" htmlFor={`optionC-${q._id}`}>
+                  <label
+                    className="form-check-label"
+                    htmlFor={`optionC-${q._id}`}
+                  >
                     {q.optionC}
                   </label>
                 </div>
@@ -173,14 +208,21 @@ const GetExam = () => {
                     id={`optionD-${q._id}`}
                     disabled={submitted}
                   />
-                  <label className="form-check-label" htmlFor={`optionD-${q._id}`}>
+                  <label
+                    className="form-check-label"
+                    htmlFor={`optionD-${q._id}`}
+                  >
                     {q.optionD}
                   </label>
                 </div>
               </div>
             </div>
           ))}
-          <button type="submit" className="btn btn-primary" disabled={submitted}>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={submitted}
+          >
             Submit Exam
           </button>
         </form>
@@ -189,4 +231,4 @@ const GetExam = () => {
   );
 };
 
-export default GetExam
+export default GetExam;

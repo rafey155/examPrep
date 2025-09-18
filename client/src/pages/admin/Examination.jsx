@@ -1,23 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import BASE_URL from "../../config/baseUrl";
 
 const Examination = () => {
   const [formData, setFormData] = useState({
-    examName: '',
-    date: '',
-    time: '',
-    duration: '',
-    totalMarks: '',
-    passingMarks: '',
-    sessionId: '',
-    status: 'Scheduled',
-    questionDistribution: [{ subject: '', numberOfQuestions: '' }],
+    examName: "",
+    date: "",
+    time: "",
+    duration: "",
+    totalMarks: "",
+    passingMarks: "",
+    sessionId: "",
+    status: "Scheduled",
+    questionDistribution: [{ subject: "", numberOfQuestions: "" }],
   });
 
   const [subjects, setSubjects] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [exams, setExams] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const [editForm, setEditForm] = useState(false);
   const [editId, setEditId] = useState(null);
@@ -29,29 +30,29 @@ const Examination = () => {
   const fetchData = async () => {
     try {
       const [subjectRes, sessionRes, examRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/subject'),
-        axios.get('http://localhost:5000/api/session'),
-        axios.get('http://localhost:5000/api/exams/exams'),
+        axios.get(`${BASE_URL}/api/subject`),
+        axios.get(`${BASE_URL}/api/session`),
+        axios.get(`${BASE_URL}/api/exams/exams`),
       ]);
       setSubjects(subjectRes.data.data || []);
       setSessions(sessionRes.data.data || []);
       setExams(examRes.data || []);
     } catch (err) {
-      console.error('Error fetching data:', err);
-      setError('Failed to load subjects or sessions');
+      console.error("Error fetching data:", err);
+      setError("Failed to load subjects or sessions");
     }
   };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError('');
+    setError("");
   };
 
   const handleQuestionDistChange = (index, e) => {
     const updated = [...formData.questionDistribution];
     updated[index][e.target.name] = e.target.value;
     setFormData({ ...formData, questionDistribution: updated });
-    setError('');
+    setError("");
   };
 
   const addDistributionField = () => {
@@ -59,14 +60,14 @@ const Examination = () => {
       ...formData,
       questionDistribution: [
         ...formData.questionDistribution,
-        { subject: '', numberOfQuestions: '' },
+        { subject: "", numberOfQuestions: "" },
       ],
     });
   };
 
   const removeDistributionField = (index) => {
     if (formData.questionDistribution.length === 1) {
-      setError('At least one subject is required');
+      setError("At least one subject is required");
       return;
     }
     const updated = [...formData.questionDistribution];
@@ -95,28 +96,30 @@ const Examination = () => {
       !passingMarks ||
       !sessionId
     ) {
-      return 'All fields are required';
+      return "All fields are required";
     }
 
     if (parseInt(passingMarks) > parseInt(totalMarks)) {
-      return 'Passing marks cannot exceed total marks';
+      return "Passing marks cannot exceed total marks";
     }
 
     if (
       questionDistribution.some(
         (dist) =>
-          !dist.subject || !dist.numberOfQuestions || parseInt(dist.numberOfQuestions) <= 0
+          !dist.subject ||
+          !dist.numberOfQuestions ||
+          parseInt(dist.numberOfQuestions) <= 0
       )
     ) {
-      return 'All question distributions must have a valid subject and number of questions';
+      return "All question distributions must have a valid subject and number of questions";
     }
 
-    return '';
+    return "";
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     const validationError = validateForm();
     if (validationError) {
@@ -125,19 +128,19 @@ const Examination = () => {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/exams', formData);
-      alert('Exam Created Successfully');
+      await axios.post(`${BASE_URL}/api/exams`, formData);
+      alert("Exam Created Successfully");
       resetForm();
       fetchData();
     } catch (err) {
-      console.error('Error submitting form:', err);
-      setError(err.response?.data?.error || 'Error submitting form');
+      console.error("Error submitting form:", err);
+      setError(err.response?.data?.error || "Error submitting form");
     }
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     const validationError = validateForm();
     if (validationError) {
@@ -146,27 +149,27 @@ const Examination = () => {
     }
 
     try {
-      await axios.put('http://localhost:5000/api/exams/${editId}', formData);
-      alert('Exam Updated Successfully');
+      await axios.put(`${BASE_URL}/api/exams/${editId}`, formData);
+      alert("Exam Updated Successfully");
       resetForm();
       fetchData();
     } catch (err) {
-      console.error('Error updating exam:', err);
-      setError(err.response?.data?.error || 'Error updating exam');
+      console.error("Error updating exam:", err);
+      setError(err.response?.data?.error || "Error updating exam");
     }
   };
 
   const resetForm = () => {
     setFormData({
-      examName: '',
-      date: '',
-      time: '',
-      duration: '',
-      totalMarks: '',
-      passingMarks: '',
-      sessionId: '',
-      status: 'Scheduled',
-      questionDistribution: [{ subject: '', numberOfQuestions: '' }],
+      examName: "",
+      date: "",
+      time: "",
+      duration: "",
+      totalMarks: "",
+      passingMarks: "",
+      sessionId: "",
+      status: "Scheduled",
+      questionDistribution: [{ subject: "", numberOfQuestions: "" }],
     });
     setEditForm(false);
     setEditId(null);
@@ -174,7 +177,7 @@ const Examination = () => {
 
   const handleEdit = (exam) => {
     setFormData({
-      examName: exam.examName || exam.title || '',
+      examName: exam.examName || exam.title || "",
       date: exam.date,
       time: exam.time,
       duration: exam.duration,
@@ -183,7 +186,7 @@ const Examination = () => {
       sessionId: exam.sessionId?._id || exam.sessionId,
       status: exam.status,
       questionDistribution: exam.questionDistribution || [
-        { subject: '', numberOfQuestions: '' },
+        { subject: "", numberOfQuestions: "" },
       ],
     });
     setEditId(exam._id);
@@ -192,11 +195,11 @@ const Examination = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete('http://localhost:5000/api/exams/${id}');
-      alert('Deleted Successfully');
+      await axios.delete(`${BASE_URL}/api/exams/${id}`);
+      alert("Deleted Successfully");
       fetchData();
     } catch (err) {
-      alert('Try Again Later');
+      alert("Try Again Later");
       console.error(err);
     }
   };
@@ -205,7 +208,9 @@ const Examination = () => {
     <div className="container mt-2">
       <div className="card shadow-sm">
         <div className="card-header text-center py-2">
-          <h6 className="mb-0">{editForm ? 'Edit Examination' : 'Create Examination'}</h6>
+          <h6 className="mb-0">
+            {editForm ? "Edit Examination" : "Create Examination"}
+          </h6>
         </div>
         <div className="card-body p-3">
           {error && <div className="alert alert-danger py-1 px-2">{error}</div>}
@@ -366,8 +371,12 @@ const Examination = () => {
               </button>
             </div>
             <div className="text-end">
-              <button type="submit" className="btn-sm px-4" style={{ backgroundColor: '#A6B1E1' }}>
-                {editForm ? 'Update' : 'Submit'}
+              <button
+                type="submit"
+                className="btn-sm px-4"
+                style={{ backgroundColor: "#A6B1E1" }}
+              >
+                {editForm ? "Update" : "Submit"}
               </button>
             </div>
           </form>
@@ -402,7 +411,7 @@ const Examination = () => {
                   <td>{exam.date}</td>
                   <td>{exam.time}</td>
                   <td>{exam.duration}</td>
-                  <td>{exam.sessionId?.name || 'N/A'}</td>
+                  <td>{exam.sessionId?.name || "N/A"}</td>
                   <td>{exam.status}</td>
                   <td>
                     <button
