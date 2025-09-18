@@ -38,6 +38,4 @@ app.use("/api/exams/", require("./routes/examinationRoute"));
 app.use("/api/message", require("./routes/messageRoute"));
 
 // api end
-app.listen(5000, () => {
-  console.log("Server is running on http://localhost:5000");
-});
+module.exports = app;
