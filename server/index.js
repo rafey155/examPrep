@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const app = express();
 app.use(
   cors({
-    origin: "https://exam-prep-frontend.vercel.app/", // TODO: Replace with your actual frontend URL
+    origin: "https://exam-prep-frontend.vercel.app", // No trailing slash
     credentials: true,
   })
 );
