@@ -10,7 +10,7 @@ app.use(
   })
 );
 app.use(express.json());
-const URL = "mongodb://localhost:27017/examprep";
+const URL = process.env.MONGO_URL;
 
 mongoose
   .connect(URL)
