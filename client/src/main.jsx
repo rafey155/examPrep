@@ -7,7 +7,10 @@ import "../node_modules/bootstrap/dist/js/bootstrap.bundle.js"
 import axios from 'axios';
 
 axios.interceptors.request.use((config) => {
-  const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+  let baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+  if (baseURL.endsWith('/')) {
+    baseURL = baseURL.slice(0, -1);
+  }
   if (config.url && config.url.startsWith('http://localhost:5000')) {
     config.url = config.url.replace('http://localhost:5000', baseURL);
   }
