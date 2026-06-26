@@ -15,9 +15,17 @@ router.post('/', async (req, res) => {
     if (existingExaminee) {
       return res.status(400).json({message: "Examinee with this email already exists."});
     }
-    const examinee = new Examinee(req.body);
-    await examinee.save();
-    res.json({message:"Registered Succussfully"})
+    try {
+        if (req.body.session === '') {
+            delete req.body.session;
+        }
+        const examinee = new Examinee(req.body);
+        await examinee.save();
+        res.json({message:"Registered Succussfully"});
+    } catch (error) {
+        console.error("Error registering examinee:", error);
+        return res.status(500).json({ error: error.message || "Failed to register examinee" });
+    }
     const html = `
   <div style="font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #e3f2fd, #ffffff); padding: 40px;">
     <div style="max-width: 650px; margin: auto; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); overflow: hidden;">
