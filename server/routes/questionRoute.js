@@ -3,9 +3,14 @@ const express = require('express');
 const router  = express.Router();
 
 router.post('/', async(req,res)=>{
-    const question = await new Question(req.body);
-    question.save()
-    return res.json({message:"Question added Successfully"});
+    try {
+        const question = new Question(req.body);
+        await question.save();
+        return res.json({message:"Question added Successfully"});
+    } catch (error) {
+        console.error("Error adding question:", error);
+        return res.status(500).json({ error: "Failed to add question" });
+    }
 })
 
 router.get('/', async(req,res)=>{

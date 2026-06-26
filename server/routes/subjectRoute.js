@@ -3,9 +3,14 @@ const router = express.Router();
 const Subject = require('../models/Subject');
 
 router.post('/',async(req,res)=>{
-    const subject = new Subject(req.body)
-    subject.save();
-    return res.json({message:"Subject Added successfully"})
+    try {
+        const subject = new Subject(req.body);
+        await subject.save();
+        return res.json({message:"Subject Added successfully"});
+    } catch (error) {
+        console.error("Error saving subject:", error);
+        return res.status(500).json({ error: "Failed to add subject" });
+    }
 })
 
 router.get('/',async(req,res)=>{

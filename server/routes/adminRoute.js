@@ -3,10 +3,14 @@ const express = require('express');
 const router = express.Router();
 
 router.post('/',async(req,res)=>{
-
-    const admin = new Admin(req.body);
-    admin.save();
-    return res.status(200).json("Admin register successfully");
+    try {
+        const admin = new Admin(req.body);
+        await admin.save();
+        return res.status(200).json("Admin register successfully");
+    } catch (error) {
+        console.error("Error registering admin:", error);
+        return res.status(500).json({ error: "Failed to register admin" });
+    }
 });
 
 router.post('/login',async(req,res)=>{

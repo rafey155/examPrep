@@ -15,8 +15,8 @@ router.post('/', async (req, res) => {
     if (existingExaminee) {
       return res.status(400).json({message: "Examinee with this email already exists."});
     }
-    const examinee = await new Examinee(req.body);
-    examinee.save();
+    const examinee = new Examinee(req.body);
+    await examinee.save();
     res.json({message:"Registered Succussfully"})
     const html = `
   <div style="font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #e3f2fd, #ffffff); padding: 40px;">

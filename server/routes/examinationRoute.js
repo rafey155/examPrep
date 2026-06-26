@@ -228,7 +228,7 @@ router.post('/submit-exam', async (req, res) => {
 
     const passed = score >= parseInt(exam.passingMarks);
        
-    const examattempted = await new ExamAttempted({
+    const examattempted = new ExamAttempted({
       examineeId:userId._id,
       examId:exam._id,
       score,
@@ -237,7 +237,7 @@ router.post('/submit-exam', async (req, res) => {
       status:passed ? 'Passed' : 'Failed',
       resultStatus: 'Pending',
     });
-    examattempted.save();
+    await examattempted.save();
     res.json({message:'Exam submitted successfully'});
 
 

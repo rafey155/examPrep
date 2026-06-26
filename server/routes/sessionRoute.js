@@ -3,9 +3,14 @@ const router = express.Router();
 const Session = require('../models/Session');
 
 router.post('/',async(req,res)=>{
-    const session = new Session(req.body)
-    session.save();
-    return res.json({message:"Session Added successfully"})
+    try {
+        const session = new Session(req.body);
+        await session.save();
+        return res.json({message:"Session Added successfully"});
+    } catch (error) {
+        console.error("Error saving session:", error);
+        return res.status(500).json({ error: "Failed to add session" });
+    }
 })
 
 router.get('/',async(req,res)=>{
