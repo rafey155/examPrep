@@ -57,7 +57,8 @@ const Registration = () => {
       });
     } catch (error) {
       console.error('Submission Error:', error);
-      alert('Failed to register');
+      const errorMsg = error.response?.data?.message || error.response?.data?.error || 'Failed to register';
+      alert(errorMsg);
     }
   };
 
