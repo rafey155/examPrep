@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router';
 import img from "../../assets/images/imagelogo.jpg";
 
 const Login = () => {
   const [data, setData] = useState({ email: '', password: '' });
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 768;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,27 +33,31 @@ const Login = () => {
 
   const styles = {
     page: {
-      height: '100vh',
+      minHeight: '100vh',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       background: 'linear-gradient(135deg, #6e00ff, #8e2de2, #4a00e0)',
       fontFamily: 'Segoe UI, sans-serif',
+      padding: isMobile ? '16px' : '0',
     },
     card: {
-      width: '950px',
-      height: '580px',
+      width: '100%',
+      maxWidth: isMobile ? '450px' : '950px',
+      height: isMobile ? 'auto' : '580px',
       display: 'flex',
+      flexDirection: isMobile ? 'column' : 'row',
       borderRadius: '16px',
       overflow: 'hidden',
       boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
       backgroundColor: '#fff',
+      padding: isMobile ? '24px 12px' : '0',
     },
     leftPanel: {
+      display: isMobile ? 'none' : 'flex',
       flex: 1,
       background: 'linear-gradient(135deg, #6e00ff, #8e2de2, #4a00e0)',
       color: '#fff',
-      display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
@@ -75,7 +88,7 @@ const Login = () => {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      padding: '40px',
+      padding: isMobile ? '12px' : '40px',
     },
     formBox: {
       width: '100%',
@@ -215,10 +228,6 @@ const Login = () => {
               <Link to="/registration" style={styles.link}>Sign up</Link>
             </div>
 
-            <div style={{...styles.createAccount, marginTop: '15px'}}>
-              Are you an Admin?
-              <Link to="/adlogin" style={styles.link}>Admin Login</Link>
-            </div>
           </form>
         </div>
       </div>
